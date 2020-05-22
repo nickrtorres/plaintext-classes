@@ -8,12 +8,21 @@ function column(s) {
     if (fields[2] == "" || fields[2] ~ /<a |&nbs/) {
         return "N/A"
     } else if (fields[2] ~ /<div/) {
-        # TODO figure out how to handle the jpeg
         return "?"
     } else {
         return fields[2]
     }
 
+}
+
+# open classes will have a div tag to a jpeg
+function jpg(s) {
+    split(s, fields, "</?td>")
+    if (fields[2] ~ /<div/) {
+        return "Y"
+    } else {
+        return "N"
+    }
 }
 
 BEGIN {
@@ -44,7 +53,7 @@ s == 4   { cols["NOTES"]      = column($0); s = s + 1; next; }
 s == 5   { cols["TYPE"]       = column($0); s = s + 1; next; }
 s == 6   { cols["DAYS"]       = column($0); s = s + 1; next; }
 s == 7   { cols["TIME"]       = column($0); s = s + 1; next; }
-s == 8   { cols["OPEN?"]      = column($0); s = s + 1; next; }
+s == 8   { cols["OPEN?"]      = jpg($0);    s = s + 1; next; }
 s == 9   { cols["LOCATION"]   = column($0); s = s + 1; next; }
 s == 10  { cols["INSTRUCTOR"] = column($0); s = s + 1; next; }
 s == 11  { cols["COMMENT"]    = column($0); s = s + 1; next; }
