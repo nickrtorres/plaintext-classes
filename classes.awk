@@ -22,17 +22,17 @@ BEGIN {
            "LOCATION", "INSTRUCTOR", "COMMENT")
 }
 
+# TODO: something is weird about the last record
+/<p>Contact/ {
+    next
+}
+
 # class title
 /<h4><span class=/ { printf(">>> CECS %d <<<\n", substr($3, 0, 3)) }
 
 # begin section
 /^<th scope="row"/ {
     s = 1
-    next
-}
-
-# TODO: something is weird about the last record
-/<p>Contact/ {
     next
 }
 
